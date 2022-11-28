@@ -1,17 +1,24 @@
 package com.example.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.request.SellerRequest;
 
-@Data
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table( name = "seller",uniqueConstraints=@UniqueConstraint(
@@ -21,13 +28,10 @@ public class Seller {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long customerId;
+	private Long sellerId;
 	
 	@Column(nullable=false)
-	private String firstName;
-	
-	@Column(nullable=false)
-	private String lastName;
+	private String name;
 	
 	@Column(nullable=false)
 	private String phoneNumber;
@@ -35,12 +39,18 @@ public class Seller {
 	@Column(nullable=false)
 	private String password;
 
-	@Column(nullable=false)
-	private String address;
+	@OneToMany(mappedBy="seller")
+	private List<Product> products;
+
 	
-	@Column(nullable=false)
-	private String identity_proof;
+	public Seller(SellerRequest sellerRequest) {
+		this.sellerId = sellerRequest.getSellerId();
+		this.name = sellerRequest.getName();
+		this.phoneNumber = sellerRequest.getPhoneNumber();
+		this.password = sellerRequest.getPassword();
+	}
 	
 	
 	
+
 }
